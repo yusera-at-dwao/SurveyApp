@@ -1,0 +1,84 @@
+{
+  "surveyUI": {
+    "rBackground": "255",
+    "gBackground": "80",
+    "bBackground": "80",
+    "rText": "255",
+    "gText": "80",
+    "bText": "80",
+    "rBorder": "255",
+    "gBorder": "255",
+    "bBorder": "51"
+  },
+  "surveyQuestions": [
+    {
+      "id": 0,
+      "question": "Long Text question",
+      "responseType": "1",
+      "responseOptions": [],
+      "conditionMapping": [
+        "-2"
+      ]
+    },
+    {
+      "id": 1,
+      "question": "Radio type question",
+      "responseType": "2",
+      "responseOptions": [
+        "R1",
+        "R2",
+        "R3"
+      ],
+      "conditionMapping": [
+        3,
+        0,
+        2
+      ]
+    },
+    {
+      "id": 2,
+      "question": "Checkbox type Question",
+      "responseType": "3",
+      "responseOptions": [
+        "C1",
+        "C2",
+        "C3",
+        "c5",
+        "c6","C1",
+        "C2",
+        "C3",
+        "c5",
+        "c6"
+      ],
+      "conditionMapping": [
+        0
+      ]
+    },
+    {
+      "id": 3,
+      "question": "NPS Question",
+      "responseType": "4",
+      "responseOptions": [
+        "Strongly disagree",
+        "Nothing",
+        "Strongly agree"
+      ],
+      "conditionMapping": [
+        1,
+        2,
+        10
+      ]
+    }
+  ],
+  "surveyInfo": {
+    "orgId": "1038",
+    "customerId": "1066",
+    "surveyId": "1197",
+    "language": "",
+    "position": "",
+    "background": "",
+    "uniqueidentifier": "",
+    "theme": "",
+    "branding": ""
+  }
+}
