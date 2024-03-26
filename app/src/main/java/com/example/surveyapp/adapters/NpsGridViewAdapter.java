@@ -2,6 +2,7 @@ package com.example.surveyapp.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,14 +12,17 @@ import androidx.appcompat.widget.AppCompatButton;
 
 import com.example.surveyapp.R;
 import com.example.surveyapp.listeners.NpsOptionClickListener;
+import com.example.surveyapp.models.QuestionResponse;
 
 public class NpsGridViewAdapter extends BaseAdapter{
     Context ctx;
     int selectedOption=-1;
     NpsOptionClickListener npsOptionClickListener;
-public NpsGridViewAdapter(Context ctx, NpsOptionClickListener npsOptionClickListener){
+    QuestionResponse currentQuestionResponse;
+public NpsGridViewAdapter(Context ctx, NpsOptionClickListener npsOptionClickListener,  QuestionResponse currentQuestionResponse){
     this.ctx=ctx;
-this.npsOptionClickListener=npsOptionClickListener;
+    this.npsOptionClickListener=npsOptionClickListener;
+    this.currentQuestionResponse=currentQuestionResponse;
 }
 
     public void updatedSelectedOption(int position){
@@ -27,12 +31,17 @@ this.npsOptionClickListener=npsOptionClickListener;
         }else{
             this.selectedOption=position;
         }
-
-        notifyDataSetChanged();
+       if(selectedOption!=-1) {
+           currentQuestionResponse.setQuestionResponse(String.valueOf(selectedOption));
+       }else{
+           currentQuestionResponse.setQuestionResponse("");
+       };
+       Log.d("selected Opt", ""+selectedOption);
+       notifyDataSetChanged();
     }
     @Override
     public int getCount() {
-        return 10;
+        return 11;
     }
 
     @Override
@@ -49,7 +58,7 @@ this.npsOptionClickListener=npsOptionClickListener;
     public View getView(int position, View view, ViewGroup viewGroup) {
         view=LayoutInflater.from(ctx).inflate(R.layout.nps_option, null);
         AppCompatButton  npsOption=view.findViewById(R.id.nps_option);
-        npsOption.setText(String.valueOf(position+1));
+        npsOption.setText(String.valueOf(position));
         npsOption.setBackgroundColor(selectedOption!=position? Color.parseColor("#ffffff")
                 :Color.parseColor("#00ff00"));
         npsOption.setOnClickListener(new View.OnClickListener() {

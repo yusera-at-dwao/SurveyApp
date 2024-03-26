@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.surveyapp.R;
 import com.example.surveyapp.listeners.CheckBoxClickListener;
+import com.example.surveyapp.models.QuestionResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,11 +22,25 @@ public class CheckBoxRecyViewAdapter extends RecyclerView.Adapter<CheckBoxRecyVi
     List<String> checkBoxList;
     CheckBoxClickListener listener;
     List<Integer> selectedItems;
+    QuestionResponse currentQuestionResponse;
     public CheckBoxRecyViewAdapter( List<String> checkBoxList,
-    CheckBoxClickListener listener){
+    CheckBoxClickListener listener, QuestionResponse currentQuestionResponse){
         this.checkBoxList=checkBoxList;
         this.listener=listener;
         selectedItems=new ArrayList<>();
+        this.currentQuestionResponse=currentQuestionResponse;
+    }
+    private void updateResponseString(){
+        String resp="";
+        for(int i=0; i< selectedItems.size(); i++){
+            if(i==selectedItems.size()-1){
+                resp+= checkBoxList.get(selectedItems.get(i));
+                break;
+            }
+           resp+= checkBoxList.get(selectedItems.get(i))+",";
+        }
+        currentQuestionResponse.setQuestionResponse(resp);
+        Log.d("response changed", currentQuestionResponse.getQuestionResponse());
     }
     public void updateCheckedItem(int pos, boolean selected){
       if(selected){
@@ -34,6 +49,7 @@ public class CheckBoxRecyViewAdapter extends RecyclerView.Adapter<CheckBoxRecyVi
       }else {
           this.selectedItems.remove(Integer.valueOf(pos));
       }
+        updateResponseString();
         notifyDataSetChanged();
     }
     @NonNull
@@ -51,7 +67,8 @@ public class CheckBoxRecyViewAdapter extends RecyclerView.Adapter<CheckBoxRecyVi
         holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-           if(selectedItems.contains(Integer.valueOf(position)))  listener.onClick(holder.getAdapterPosition(), b);
+//           if(selectedItems.contains(Integer.valueOf(holder.getAdapterPosition())))
+               listener.onClick(holder.getAdapterPosition(), b);
             }
         });
     }

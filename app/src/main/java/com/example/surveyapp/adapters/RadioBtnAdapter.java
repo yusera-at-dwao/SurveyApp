@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.surveyapp.R;
 import com.example.surveyapp.listeners.RadioClickListener;
+import com.example.surveyapp.models.QuestionResponse;
 
 import java.util.List;
 
@@ -19,12 +20,16 @@ public class RadioBtnAdapter extends RecyclerView.Adapter<RadioBtnAdapter.ViewHo
      int selectedPosition;
     List<String> radioBtnList;
     RadioClickListener radioClickListener;
-     public RadioBtnAdapter(List<String> radioBtnList, RadioClickListener radioClickListener){
+    QuestionResponse currentQuestionResponse;
+     public RadioBtnAdapter(List<String> radioBtnList, RadioClickListener radioClickListener, QuestionResponse currentQuestionResponse){
+         this.currentQuestionResponse=currentQuestionResponse;
         this.radioBtnList=radioBtnList;
         this.radioClickListener=radioClickListener;
+        this.selectedPosition=-1;
     }
     public void updateCheckedItem(int selectedPosition){
         this.selectedPosition=selectedPosition;
+        currentQuestionResponse.setQuestionResponse(radioBtnList.get(selectedPosition));
         notifyDataSetChanged();
     }
     @NonNull

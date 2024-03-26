@@ -1,12 +1,14 @@
 package com.example.surveyapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,10 +16,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import com.example.surveyapp.activities.DashboardActivity;
 import com.example.surveyapp.network.FetchJson;
 import com.example.surveyapp.network.VolleyService;
-import com.example.surveyapp.survey.ShowSurvey;
+import com.example.surveylib.survey.ShowSurvey;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,10 +32,21 @@ import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 JSONObject json=null;
+TextView next;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO); //disable night mode
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Log.d("Activity", ""+this.getClass().getSimpleName());
+        next=findViewById(R.id.next);
+        Intent intent=new Intent(this, DashboardActivity.class);
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(intent);
+            }
+        });
 //        VolleyService.callVolley(this);
 //        try {
 //            VolleyService volleyService=new VolleyService();
@@ -42,10 +57,11 @@ JSONObject json=null;
 //            throw new RuntimeException(e);
 //        }
 //        if(json!=null){
-        String url= "https://assets.alium.co.in/cmmn/cstjn/cstjn_1038.json";
-           new ShowSurvey(this, url);
+//        String url= "https://assets.alium.co.in/cmmn/cstjn/cstjn_1038.json";
+//           new ShowSurvey(this, url);
 
 //        }
-
+        String url= "https://assets.alium.co.in/cmmn/cstjn/cstjn_1038.json";
+        new ShowSurvey(this, url, this.getTitle().toString());
     }
 }
