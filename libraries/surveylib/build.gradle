@@ -29,9 +29,9 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    testFixtures{ //added
-        enable=true
-    }
+//    testFixtures{ //added
+//        enable=true
+//    }
 }
 publishing {
     publications {
