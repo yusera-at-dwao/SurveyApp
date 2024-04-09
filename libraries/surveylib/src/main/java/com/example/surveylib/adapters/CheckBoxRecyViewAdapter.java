@@ -1,5 +1,7 @@
 package com.example.surveylib.adapters;
 
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,6 +66,10 @@ public class CheckBoxRecyViewAdapter extends RecyclerView.Adapter<CheckBoxRecyVi
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.checkBox.setText(checkBoxList.get(position));
         holder.checkBox.setChecked(selectedItems.contains(position));
+        holder.checkBox.setButtonTintList(new ColorStateList(new int[][]{
+                new int[]{-android.R.attr.state_checked},
+                new int[]{android.R.attr.state_checked}
+        }, new int[]{Color.GRAY, Color.BLUE}));
         Log.d("pos"+position, "pos: "+checkBoxList.get(position));
         holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

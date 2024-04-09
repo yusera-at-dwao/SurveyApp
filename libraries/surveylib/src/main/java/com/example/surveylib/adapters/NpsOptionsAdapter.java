@@ -39,7 +39,7 @@ public class NpsOptionsAdapter extends RecyclerView.Adapter<NpsOptionsAdapter.Vi
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.npsOption.setText(String.valueOf(position+1));
         holder.npsOption.setBackgroundColor(selectedOption!=position?Color.parseColor("#55ffffff")
-                :Color.parseColor("#00ff00"));
+                :Color.parseColor("#0000bb"));
         holder.npsOption.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

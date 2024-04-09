@@ -2,6 +2,9 @@ package com.example.surveylib.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,8 +63,14 @@ public NpsGridViewAdapter(Context ctx, NpsOptionClickListener npsOptionClickList
         view=LayoutInflater.from(ctx).inflate(R.layout.nps_option, null);
         AppCompatButton  npsOption=view.findViewById(R.id.nps_option);
         npsOption.setText(String.valueOf(position));
-        npsOption.setBackgroundColor(selectedOption!=position? Color.parseColor("#ffffff")
-                :Color.parseColor("#00ff00"));
+        Drawable d=ctx.getDrawable(R.drawable.rounded_button);
+
+        if(selectedOption==position){
+            d.setColorFilter(Color.parseColor("#00ff00" ),PorterDuff.Mode.ADD);
+        }
+        npsOption.setBackgroundDrawable(d);
+//        npsOption.setBackgroundColor(selectedOption!=position? Color.parseColor("#808080")
+//                :Color.parseColor("#00ff00"));
         npsOption.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

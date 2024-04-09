@@ -1,5 +1,7 @@
 package com.example.surveylib.adapters;
 
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,6 +46,13 @@ public class RadioBtnAdapter extends RecyclerView.Adapter<RadioBtnAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.radioButton.setText(radioBtnList.get(position));
         holder.radioButton.setChecked(position==selectedPosition);
+        holder.radioButton.setButtonTintList(new ColorStateList(new int[][]{
+                new int[]{-android.R.attr.state_enabled},
+                new int[]{android.R.attr.state_enabled}
+        }, new int[]{
+                Color.GRAY,
+                Color.BLUE
+        }));
         Log.d("pos"+position, "pos: "+radioBtnList.get(position));
         holder.radioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

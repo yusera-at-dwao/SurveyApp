@@ -6,21 +6,25 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.GridView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -58,12 +62,13 @@ public class ShowSurvey  implements VolleyResponseListener {
     private View layoutView;
     private RelativeLayout layout;
     private RadioBtnAdapter adapter;
+    private AppCompatTextView currentQuestion;
     private NpsOptionsAdapter npsOptionsAdapter;
     private NpsGridViewAdapter npsGridViewAdapter;
     private Dialog dialog;
     private CheckBoxRecyViewAdapter checkBoxRecyViewAdapter;
 //    private static ShowSurvey instance;
-    private MaterialButton  nextQuestion;
+    private AppCompatButton nextQuestion;
     private  AppCompatImageView closeDialogBtn;
 
     private int currentIndx=0;
@@ -140,6 +145,7 @@ public class ShowSurvey  implements VolleyResponseListener {
                   currentIndx++;
                   handleNextQuestion();
                   nextQuestion.setEnabled(false);
+                  nextQuestion.setAlpha(0.5f);
 
             }
         });
@@ -155,6 +161,11 @@ public class ShowSurvey  implements VolleyResponseListener {
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.setCancelable(false);
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        WindowManager.LayoutParams lp=dialog.getWindow().getAttributes();
+        lp.gravity= Gravity.BOTTOM;
+        lp.horizontalMargin=0f;
+        lp.verticalMargin=0.0f;
+        dialog.getWindow().setAttributes(lp);
         dialog.show();
         trackWithAlium();
     }
@@ -216,12 +227,13 @@ public class ShowSurvey  implements VolleyResponseListener {
 //                    Drawable dialogBg=context.getDrawable(R.drawable.dialog_bg);
 //
 //                    layoutView.setBackgroundResource(R.drawable.dialog_bg);
-
+                    ViewGroup questionContainer= layoutView.findViewById(R.id.question_container);
+                    currentQuestion=questionContainer.findViewById(R.id.question);
                     layout= layoutView.findViewById(R.id.dialog_layout_content);
                     GradientDrawable gradientDrawable=(GradientDrawable)  layoutView
                             .findViewById(R.id.dialog_layout).getBackground();
 
-                    gradientDrawable.setCornerRadius((int)(15* Resources.getSystem().getDisplayMetrics().density));
+                    gradientDrawable.setCornerRadius((int)(5* Resources.getSystem().getDisplayMetrics().density));
                     gradientDrawable.setColor(Color.WHITE);
 //                    if(surveyUi!=null)layoutView.setBackgroundColor(Color.argb(255,
 //                            Integer.parseInt(surveyUi.getString("rBackground")),
@@ -237,7 +249,12 @@ public class ShowSurvey  implements VolleyResponseListener {
                                     Integer.parseInt(surveyUi.getString("rBorder")),
                                     Integer.parseInt(surveyUi.getString("gBorder")),
                                     Integer.parseInt(surveyUi.getString("bBorder"))));
-                    show();
+                    ((Activity)context).runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            show();
+                        }
+                    });
 //                    trackWithAlium();
 
                 } catch (JSONException e) {
@@ -279,15 +296,30 @@ public class ShowSurvey  implements VolleyResponseListener {
                     .getInt("id"));
             currentQuestionResponse.setResponseType(surveyQuestions
                     .getJSONObject(currentIndx).getString("responseType"));
-
+            currentQuestion.setText(surveyQuestions.getJSONObject(currentIndx).getString("question"));
+            //long text question
                 if(surveyQuestions.getJSONObject(currentIndx).getString("responseType").equals("1")){
 
                     View longtextQues= LayoutInflater.from(context).inflate(R.layout.long_text_ques,
                             null);
-                    AppCompatTextView quest=longtextQues.findViewById(R.id.question);
-                    quest.setText(surveyQuestions.getJSONObject(currentIndx).getString("question"));
                     TextInputLayout textInputLayout=longtextQues.findViewById(R.id.text_input_layout);
+
                     TextInputEditText input=longtextQues.findViewById(R.id.text_input_edit_text);
+                    GradientDrawable d= (GradientDrawable)input.getBackground();
+                    d.mutate();
+                    input.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                        @Override
+                        public void onFocusChange(View v, boolean hasFocus) {
+
+                            if(hasFocus){
+
+                                d.setStroke(2, Color.BLUE);
+                            }else{
+
+                                d.setStroke(2, Color.BLACK);
+                            }
+                        }
+                    });
                     input.addTextChangedListener(new TextWatcher() {
                         @Override
                         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -300,8 +332,10 @@ public class ShowSurvey  implements VolleyResponseListener {
                                     .replace(" ", "%20"));
                             if(currentQuestionResponse.getQuestionResponse().length()>0){
                                 nextQuestion.setEnabled(true);
+                                nextQuestion.setAlpha(1f);
                             }else{
                                 nextQuestion.setEnabled(false);
+                                nextQuestion.setAlpha(0.5f);
                             }
                             Log.d("input", currentQuestionResponse.getQuestionResponse());
                         }
@@ -311,10 +345,10 @@ public class ShowSurvey  implements VolleyResponseListener {
 
                         }
                     });
-                    if(surveyUi!=null)quest.setTextColor(Color.argb(255,
-                            Integer.parseInt(surveyUi.getString("rText")),
-                            Integer.parseInt(surveyUi.getString("gText")),
-                            Integer.parseInt(surveyUi.getString("bText"))));
+//                    if(surveyUi!=null)quest.setTextColor(Color.argb(255,
+//                            Integer.parseInt(surveyUi.getString("rText")),
+//                            Integer.parseInt(surveyUi.getString("gText")),
+//                            Integer.parseInt(surveyUi.getString("bText"))));
                     this.layout.addView(longtextQues);
                 }
 
@@ -328,12 +362,10 @@ public class ShowSurvey  implements VolleyResponseListener {
                     responseOptions.add(responseOptJSON.getString(i));
                 }
                 View radioQues= LayoutInflater.from(context).inflate(R.layout.radio_ques, null);
-                AppCompatTextView quest=radioQues.findViewById(R.id.question);
-                quest.setText(surveyQuestions.getJSONObject(currentIndx).getString("question"));
-                    if(surveyUi!=null)quest.setTextColor(Color.argb(255,Integer
-                                    .parseInt(surveyUi.getString("rText")),
-                            Integer.parseInt(surveyUi.getString("gText")),
-                            Integer.parseInt(surveyUi.getString("bText"))));
+//                   if(surveyUi!=null)quest.setTextColor(Color.argb(255,Integer
+//                                    .parseInt(surveyUi.getString("rText")),
+//                            Integer.parseInt(surveyUi.getString("gText")),
+//                            Integer.parseInt(surveyUi.getString("bText"))));
 
                     RecyclerView radioBtnRecyView=radioQues.findViewById(R.id.radio_btn_rec_view);
                 radioBtnRecyView.setLayoutManager(new LinearLayoutManager(context));
@@ -344,11 +376,14 @@ public class ShowSurvey  implements VolleyResponseListener {
                         radioBtnRecyView.post(new Runnable() {
                             @Override
                             public void run() {
+
                                 adapter.updateCheckedItem(position);
                                 if(currentQuestionResponse.getQuestionResponse().length()>0){
                                     nextQuestion.setEnabled(true);
+                                    nextQuestion.setAlpha(1f);
                                 }else{
                                     nextQuestion.setEnabled(false);
+                                    nextQuestion.setAlpha(0.5f);
                                 }
                             }
                         });
@@ -367,10 +402,8 @@ public class ShowSurvey  implements VolleyResponseListener {
                         responseOptions.add(responseOptJSON.getString(i));
                     }
                     View checkBoxQues= LayoutInflater.from(context).inflate(R.layout.checkbox_type_ques, null);
-                    AppCompatTextView quest=checkBoxQues.findViewById(R.id.question);
-                    quest.setText(surveyQuestions.getJSONObject(currentIndx).getString("question"));
-                    if(surveyUi!=null)quest.setTextColor(Color.argb(255,Integer.parseInt(surveyUi.getString("rText")),
-                            Integer.parseInt(surveyUi.getString("gText")), Integer.parseInt(surveyUi.getString("bText"))));
+//                     if(surveyUi!=null)quest.setTextColor(Color.argb(255,Integer.parseInt(surveyUi.getString("rText")),
+//                            Integer.parseInt(surveyUi.getString("gText")), Integer.parseInt(surveyUi.getString("bText"))));
 
                     RecyclerView recyclerView=checkBoxQues.findViewById(R.id.checkbox_recy_view);
                     recyclerView.setLayoutManager(new LinearLayoutManager(context));
@@ -382,24 +415,28 @@ public class ShowSurvey  implements VolleyResponseListener {
                                 @Override
                                 public void run() {
                                     checkBoxRecyViewAdapter.updateCheckedItem(position, selected);
+
                                     if(currentQuestionResponse.getQuestionResponse().length()>0){
                                         nextQuestion.setEnabled(true);
+                                        nextQuestion.setAlpha(1f);
                                     }else{
                                         nextQuestion.setEnabled(false);
+                                        nextQuestion.setAlpha(0.5f);
                                     }
                                 }
                             });
                         }
                     };
-                    checkBoxRecyViewAdapter=new CheckBoxRecyViewAdapter(responseOptions, checkBoxClickListener, currentQuestionResponse);
+                    checkBoxRecyViewAdapter=new CheckBoxRecyViewAdapter(responseOptions,
+                            checkBoxClickListener, currentQuestionResponse);
                     recyclerView.setAdapter(checkBoxRecyViewAdapter);
                     this.layout.addView(checkBoxQues);
-                }else  if(surveyQuestions.getJSONObject(currentIndx).getString("responseType").equals("4")){
+                }else  if(surveyQuestions.getJSONObject(currentIndx).getString("responseType")
+                        .equals("4")){
                     View npsQues= LayoutInflater.from(context).inflate(R.layout.nps_ques, null);
-                    AppCompatTextView quest=npsQues.findViewById(R.id.question);
-                    quest.setText(surveyQuestions.getJSONObject(currentIndx).getString("question"));
-                    if(surveyUi!=null)quest.setTextColor(Color.argb(255,Integer.parseInt(surveyUi.getString("rText")),
-                            Integer.parseInt(surveyUi.getString("gText")), Integer.parseInt(surveyUi.getString("bText"))));
+//
+//                    if(surveyUi!=null)quest.setTextColor(Color.argb(255,Integer.parseInt(surveyUi.getString("rText")),
+//                            Integer.parseInt(surveyUi.getString("gText")), Integer.parseInt(surveyUi.getString("bText"))));
 
                     GridView npsRecView=npsQues.findViewById(R.id.nps_recy_view);
                     NpsOptionClickListener listener=new NpsOptionClickListener() {
@@ -411,10 +448,10 @@ public class ShowSurvey  implements VolleyResponseListener {
                                     npsGridViewAdapter.updatedSelectedOption(position);
                                     if( currentQuestionResponse.getQuestionResponse().length()>0){
                                         nextQuestion.setEnabled(true);
-                                        Log.d("int", ""+Integer.parseInt(currentQuestionResponse.getQuestionResponse()));
-
+                                        nextQuestion.setAlpha(1f);
                                     }else{
                                         nextQuestion.setEnabled(false);
+                                        nextQuestion.setAlpha(0.5f);
                                     }
 //                                    npsOptionsAdapter.updatedSelectedOption(position);
                                 }
