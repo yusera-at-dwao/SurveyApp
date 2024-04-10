@@ -11,7 +11,6 @@
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cursorColor="@color/black"
         android:id="@+id/text_input_layout"
         android:layout_marginVertical="10dp"
         app:boxCornerRadiusBottomEnd="5dp"
