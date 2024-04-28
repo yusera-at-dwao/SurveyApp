@@ -45,11 +45,14 @@ import com.example.surveylib.network.VolleyService;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -175,6 +178,15 @@ public class ShowSurvey  implements VolleyResponseListener {
         Log.d("response from", json.toString());
         String checkURL=currentScreen;
         surveyResponse(json, checkURL);
+        Gson gson=new Gson();
+        Type type=new TypeToken<Map<String, SurveyConfig>>(){}.getType();
+        Map<String, SurveyConfig> surveyConfigList=gson.fromJson(json.toString(),
+                type);
+        Iterator<String> keys=surveyConfigList.keySet().iterator();
+        while (keys.hasNext()){
+            String key=keys.next();
+            Log.i(key, surveyConfigList.get(key).toString());
+        }
 
     }
 

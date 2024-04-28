@@ -1,5 +1,18 @@
 {
   "surveyUI": {
+    "backgroundColor": "#FF5050",
+
+    "borderColor": "#000000",
+    "question": {
+      "textColor": "#000000"
+    },
+    "options": {
+      "textColor": "#000000"
+    },
+    "nextCta": {
+      "textColor": "#ffffff",
+      "backgroundColor": "#060270"
+    },
     "rBackground": "255",
     "gBackground": "80",
     "bBackground": "80",
@@ -10,30 +23,21 @@
     "gBorder": "255",
     "bBorder": "51"
   },
+
   "surveyQuestions": [
     {
       "id": 0,
       "question": "Long Text question",
       "responseType": "1",
       "responseOptions": [],
-      "conditionMapping": [
-        "-2"
-      ]
+      "conditionMapping": ["-2"]
     },
     {
       "id": 1,
       "question": "Radio type question",
       "responseType": "2",
-      "responseOptions": [
-        "R1",
-        "R2",
-        "R3"
-      ],
-      "conditionMapping": [
-        3,
-        0,
-        2
-      ]
+      "responseOptions": ["R1", "R2", "R3"],
+      "conditionMapping": [3, 0, 2]
     },
     {
       "id": 2,
@@ -44,30 +48,21 @@
         "C2",
         "C3",
         "c5",
-        "c6","C1",
+        "c6",
+        "C1",
         "C2",
         "C3",
         "c5",
         "c6"
       ],
-      "conditionMapping": [
-        0
-      ]
+      "conditionMapping": [0]
     },
     {
       "id": 3,
       "question": "NPS Question",
       "responseType": "4",
-      "responseOptions": [
-        "Strongly disagree",
-        "Nothing",
-        "Strongly agree"
-      ],
-      "conditionMapping": [
-        1,
-        2,
-        10
-      ]
+      "responseOptions": ["Strongly disagree", "Nothing", "Strongly agree"],
+      "conditionMapping": [1, 2, 10]
     }
   ],
   "surveyInfo": {

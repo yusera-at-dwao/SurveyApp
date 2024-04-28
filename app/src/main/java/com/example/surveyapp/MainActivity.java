@@ -61,7 +61,7 @@ TextView next;
 //           new ShowSurvey(this, url);
 
 //        }
-        String url= "";
+        String url= "https://assets.alium.co.in/cmmn/cstjn/cstjn_1038.json";
         new ShowSurvey(this, url, this.getTitle().toString());
     }
 }

@@ -24,7 +24,7 @@ public class DashboardActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        String url= "";
+        String url= "https://assets.alium.co.in/cmmn/cstjn/cstjn_1038.json";
         new ShowSurvey(this, url, this.getTitle().toString());
     }
 }

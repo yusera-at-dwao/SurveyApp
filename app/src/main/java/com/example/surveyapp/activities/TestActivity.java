@@ -17,7 +17,7 @@ public class TestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
         next=findViewById(R.id.next);
-        String url= "";
+        String url= "https://assets.alium.co.in/cmmn/cstjn/cstjn_1038.json";
         new ShowSurvey(this, url, this.getTitle().toString());
     }
 }
